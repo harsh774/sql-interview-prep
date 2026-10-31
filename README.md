@@ -9,8 +9,8 @@ A 15-day plan, about 1–1.5 hours a day, for the database round of an SDE inter
 | 1 | SELECT/WHERE, GROUP BY, HAVING, window functions, ROW_NUMBER, LAG, WITH | ✅ Done | [day-01.sql](day-01.sql) |
 | 2 | Ties (RANK vs DENSE_RANK), Nth highest, JOINs, anti-join, NULL rules | ✅ Done (quiz 4/5) | [day-02.sql](day-02.sql) |
 | 3 | Top N per group, DISTINCT ON, duplicates, FILTER, mock round | ✅ Done | [day-03.sql](day-03.sql) |
-| 4–5 | Indexing & query plans (`EXPLAIN ANALYZE`) | ⏳ In progress | [day-04.sql](day-04.sql) |
-| 6–8 | Transactions & concurrency | | |
+| 4–5 | Indexing & query plans (`EXPLAIN ANALYZE`) | ✅ Done | [day-04.sql](day-04.sql), [day-05.sql](day-05.sql) |
+| 6–8 | Transactions & concurrency | ⏳ Next | |
 | 9 | Schema design | | |
 | 10 | Performance problems in production | | |
 | 11–12 | Scaling concepts | | |
@@ -39,5 +39,9 @@ The expected answer for each query is in the comment above it.
 - **WITH:** step 2 reads `FROM <cte_name>` and only sees the columns step 1 selected.
 - **Nth highest** → DENSE_RANK. **Top N per group** → ROW_NUMBER. **Top 1, Postgres** → DISTINCT ON.
 - **NULL:** never `= NULL`, always `IS NULL`. `COUNT(col)`, `SUM`, `AVG` skip NULLs.
+
+- **Index rules:** keep the column alone (no function, no math); `(A, B)` helps A or A+B, not B alone.
+- **Auto-indexed:** only PRIMARY KEY and UNIQUE. Index foreign keys / JOIN columns yourself.
+- **Reading a plan:** "Seq Scan on ___" = table, "Filter: (___)" = column to index.
 
 See [mistakes.md](mistakes.md) for every mistake made so far, to revise on Days 14–15.

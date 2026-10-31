@@ -26,3 +26,7 @@ Redo each one without looking during revision (Days 14–15).
 | 3 | GROUP BY choice | `GROUP BY s.id, s.city` for a per-city count | The "per" rule: per city → `GROUP BY s.city` |
 | 4 | LIKE and indexes | Thought `name LIKE '%vi'` (ends with) can use an index | A `%` at the start breaks the index: matches are scattered, like words ending in "vi" in a dictionary |
 | 4 | Math on a column | Thought `marks + 10 > 90` can use an index (no function) | Math counts too. Column must be completely alone: `marks > 80` |
+| 5 | Composite index | Thought `WHERE joined_on >= ...` uses an index on `(city, joined_on)` | Leftmost rule: the second column alone is scattered. Say "city is the FIRST column", not just "city is indexed" |
+| 5 | Function + composite | Said `city = 'Pune' AND date_trunc(..., joined_on) = ...` can't use the index at all | A function only blocks its own condition: city uses the index (Index Cond), date_trunc is checked row by row (Filter) |
+| 5 | Reading EXPLAIN | Plan showed `Seq Scan on orders`, `Filter: (customer_id = 42)`; I indexed `students(marks)` | "Seq Scan on ___" = table, "Filter: (___)" = column → `CREATE INDEX ON orders (customer_id)` |
+| 5 | Auto indexes | Said all customers columns are indexed | Postgres auto-indexes only PRIMARY KEY and UNIQUE columns. Foreign keys are NOT indexed automatically |
