@@ -17,6 +17,14 @@ A 15-day plan, about 1–1.5 hours a day, for the database round of an SDE inter
 | 13 | Multi-tenancy, money, idempotency | | |
 | 14–15 | Revision + mock interviews | | |
 
+## Test scores
+
+| Date | Test | Score |
+| --- | --- | --- |
+| Day 5 | Full test Days 1–5: MCQs | 11 / 12 |
+| Day 5 | Full test Days 1–5: queries | 3.5 / 5 |
+| Day 5 | Full test Days 1–5: theory | 2 / 3 |
+
 ## How to run
 
 Each file creates its own small tables, so it runs top to bottom on an empty database:

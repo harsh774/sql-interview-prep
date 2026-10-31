@@ -30,3 +30,8 @@ Redo each one without looking during revision (Days 14–15).
 | 5 | Function + composite | Said `city = 'Pune' AND date_trunc(..., joined_on) = ...` can't use the index at all | A function only blocks its own condition: city uses the index (Index Cond), date_trunc is checked row by row (Filter) |
 | 5 | Reading EXPLAIN | Plan showed `Seq Scan on orders`, `Filter: (customer_id = 42)`; I indexed `students(marks)` | "Seq Scan on ___" = table, "Filter: (___)" = column → `CREATE INDEX ON orders (customer_id)` |
 | 5 | Auto indexes | Said all customers columns are indexed | Postgres auto-indexes only PRIMARY KEY and UNIQUE columns. Foreign keys are NOT indexed automatically |
+| 5 (test) | LEFT JOIN syntax | `left join on ... from clubs as c`, no `IS NULL` step | `FROM a LEFT JOIN b ON ... WHERE b.col IS NULL` — table name right after JOIN |
+| 5 (test) | Counting rows | `HAVING count(students) >= 2` | Use `COUNT(*)`; `students` is a table, not a column |
+| 5 (test) | Top N per group | `ORDER BY marks` (no DESC), empty WHERE | "Top" = `ORDER BY marks DESC`; top 2 = `WHERE position <= 2` |
+| 5 (test) | LAG ordering | `PARTITION BY student_id ORDER BY marks` | "Previous" means previous in time: `ORDER BY test_date` |
+| 5 (test) | WHERE vs HAVING (theory) | Said "WHERE is aggregator and HAVING is not" (reversed) | WHERE filters rows BEFORE grouping, can't use aggregates. HAVING filters groups AFTER GROUP BY, can use aggregates |
