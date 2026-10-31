@@ -24,3 +24,5 @@ Redo each one without looking during revision (Days 14–15).
 | 3 (mock) | FILTER vs HAVING | `count(*) filter (where avg_marks > 75)` | Whole piles → `HAVING AVG(marks) > 75` |
 | 3 (mock) | JOIN + GROUP BY | Couldn't start "students in more than one club" | JOIN, then `GROUP BY s.id, s.name`, then `HAVING COUNT(*) > 1` |
 | 3 | GROUP BY choice | `GROUP BY s.id, s.city` for a per-city count | The "per" rule: per city → `GROUP BY s.city` |
+| 4 | LIKE and indexes | Thought `name LIKE '%vi'` (ends with) can use an index | A `%` at the start breaks the index: matches are scattered, like words ending in "vi" in a dictionary |
+| 4 | Math on a column | Thought `marks + 10 > 90` can use an index (no function) | Math counts too. Column must be completely alone: `marks > 80` |
