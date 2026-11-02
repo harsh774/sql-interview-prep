@@ -37,3 +37,4 @@ Redo each one without looking during revision (Days 14–15).
 | 5 (test) | WHERE vs HAVING (theory) | Said "WHERE is aggregator and HAVING is not" (reversed) | WHERE filters rows BEFORE grouping, can't use aggregates. HAVING filters groups AFTER GROUP BY, can use aggregates |
 | 6 (warm-up) | Top N per group (again) | No DESC, `>= 2`, `city marks` (no comma), comma before FROM, missing `FROM positions`; retry had `marks, from` | Top = DESC, top 2 = `<= 2`. No comma right before FROM or WHERE |
 | 6 | Transactions | Said Postgres would "crash" on a negative balance | Postgres stores it unless a rule says no. Your code runs ROLLBACK; add `CHECK (balance >= 0)` as a safety net |
+| 7 (warm-up) | Commas and aliases | `marks dense_rank()` (no comma), no `AS position`, `marks city` (no comma) | One column per line, comma at the end of every line except the last. Logic (DESC, `<= 2`, FROM positions) was right this time |

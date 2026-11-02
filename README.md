@@ -10,7 +10,7 @@ A 15-day plan, about 1–1.5 hours a day, for the database round of an SDE inter
 | 2 | Ties (RANK vs DENSE_RANK), Nth highest, JOINs, anti-join, NULL rules | ✅ Done (quiz 4/5) | [day-02.sql](day-02.sql) |
 | 3 | Top N per group, DISTINCT ON, duplicates, FILTER, mock round | ✅ Done | [day-03.sql](day-03.sql) |
 | 4–5 | Indexing & query plans (`EXPLAIN ANALYZE`) | ✅ Done | [day-04.sql](day-04.sql), [day-05.sql](day-05.sql) |
-| 6–8 | Transactions & concurrency | ⏳ In progress (Day 6 done) | [day-06.sql](day-06.sql) |
+| 6–8 | Transactions & concurrency | ⏳ In progress (Days 6–7 done) | [day-06.sql](day-06.sql), [day-07.sql](day-07.sql) |
 | 9 | Schema design | | |
 | 10 | Performance problems in production | | |
 | 11–12 | Scaling concepts | | |
@@ -51,5 +51,8 @@ The expected answer for each query is in the comment above it.
 - **Index rules:** keep the column alone (no function, no math); `(A, B)` helps A or A+B, not B alone.
 - **Auto-indexed:** only PRIMARY KEY and UNIQUE. Index foreign keys / JOIN columns yourself.
 - **Reading a plan:** "Seq Scan on ___" = table, "Filter: (___)" = column to index.
+
+- **Transactions:** Read Committed = live scoreboard, Repeatable Read = photo at start, Serializable = as if one at a time. Higher levels → retry on serialization errors.
+- **Lost update fix:** `SET x = x - 100`, or `SELECT ... FOR UPDATE` before read-decide-write.
 
 See [mistakes.md](mistakes.md) for every mistake made so far, to revise on Days 14–15.
