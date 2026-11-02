@@ -10,7 +10,7 @@ A 15-day plan, about 1–1.5 hours a day, for the database round of an SDE inter
 | 2 | Ties (RANK vs DENSE_RANK), Nth highest, JOINs, anti-join, NULL rules | ✅ Done (quiz 4/5) | [day-02.sql](day-02.sql) |
 | 3 | Top N per group, DISTINCT ON, duplicates, FILTER, mock round | ✅ Done | [day-03.sql](day-03.sql) |
 | 4–5 | Indexing & query plans (`EXPLAIN ANALYZE`) | ✅ Done | [day-04.sql](day-04.sql), [day-05.sql](day-05.sql) |
-| 6–8 | Transactions & concurrency | ⏳ Next | |
+| 6–8 | Transactions & concurrency | ⏳ In progress (Day 6 done) | [day-06.sql](day-06.sql) |
 | 9 | Schema design | | |
 | 10 | Performance problems in production | | |
 | 11–12 | Scaling concepts | | |

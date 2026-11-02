@@ -35,3 +35,5 @@ Redo each one without looking during revision (Days 14–15).
 | 5 (test) | Top N per group | `ORDER BY marks` (no DESC), empty WHERE | "Top" = `ORDER BY marks DESC`; top 2 = `WHERE position <= 2` |
 | 5 (test) | LAG ordering | `PARTITION BY student_id ORDER BY marks` | "Previous" means previous in time: `ORDER BY test_date` |
 | 5 (test) | WHERE vs HAVING (theory) | Said "WHERE is aggregator and HAVING is not" (reversed) | WHERE filters rows BEFORE grouping, can't use aggregates. HAVING filters groups AFTER GROUP BY, can use aggregates |
+| 6 (warm-up) | Top N per group (again) | No DESC, `>= 2`, `city marks` (no comma), comma before FROM, missing `FROM positions`; retry had `marks, from` | Top = DESC, top 2 = `<= 2`. No comma right before FROM or WHERE |
+| 6 | Transactions | Said Postgres would "crash" on a negative balance | Postgres stores it unless a rule says no. Your code runs ROLLBACK; add `CHECK (balance >= 0)` as a safety net |
