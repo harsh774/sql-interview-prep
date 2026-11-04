@@ -10,7 +10,7 @@ A 15-day plan, about 1–1.5 hours a day, for the database round of an SDE inter
 | 2 | Ties (RANK vs DENSE_RANK), Nth highest, JOINs, anti-join, NULL rules | ✅ Done (quiz 4/5) | [day-02.sql](day-02.sql) |
 | 3 | Top N per group, DISTINCT ON, duplicates, FILTER, mock round | ✅ Done | [day-03.sql](day-03.sql) |
 | 4–5 | Indexing & query plans (`EXPLAIN ANALYZE`) | ✅ Done | [day-04.sql](day-04.sql), [day-05.sql](day-05.sql) |
-| 6–8 | Transactions & concurrency | ⏳ In progress (Days 6–7 done) | [day-06.sql](day-06.sql), [day-07.sql](day-07.sql) |
+| 6–8 | Transactions & concurrency: ACID, isolation, MVCC, deadlocks, SKIP LOCKED, optimistic locking | ✅ Done | [day-06.sql](day-06.sql), [day-07.sql](day-07.sql), [day-08.sql](day-08.sql) |
 | 9 | Schema design | | |
 | 10 | Performance problems in production | | |
 | 11–12 | Scaling concepts | | |
@@ -24,6 +24,9 @@ A 15-day plan, about 1–1.5 hours a day, for the database round of an SDE inter
 | Day 5 | Full test Days 1–5: MCQs | 11 / 12 |
 | Day 5 | Full test Days 1–5: queries | 3.5 / 5 |
 | Day 5 | Full test Days 1–5: theory | 2 / 3 |
+| Day 8 | Test Days 6–8: MCQs | 5 / 10 (retake of misses 5 / 5) |
+| Day 8 | Test Days 6–8: two-terminal scenario | 1.5 / 5 |
+| Day 8 | Test Days 6–8: theory | 3 / 5 |
 
 ## How to run
 
@@ -54,5 +57,9 @@ The expected answer for each query is in the comment above it.
 
 - **Transactions:** Read Committed = live scoreboard, Repeatable Read = photo at start, Serializable = as if one at a time. Higher levels → retry on serialization errors.
 - **Lost update fix:** `SET x = x - 100`, or `SELECT ... FOR UPDATE` before read-decide-write.
+- **Every transaction ends with `COMMIT;` (or `ROLLBACK;`).** Until then nothing is saved and the row stays locked.
+- **Plain SELECT never waits. `SELECT ... FOR UPDATE` waits** for whoever holds the row lock.
+- **Which fix for which problem:** write skew → Serializable · deadlock → lock rows in the same order (`ORDER BY id FOR UPDATE`) + retry · workers grabbing any free job → `FOR UPDATE SKIP LOCKED` · one specific row → plain `FOR UPDATE` · long form edits → `version` column.
+- **Optimistic locking:** `UPDATE ... WHERE id = ? AND version = ?` → `UPDATE 0` is NOT an error; the code must check the row count and retry.
 
 See [mistakes.md](mistakes.md) for every mistake made so far, to revise on Days 14–15.

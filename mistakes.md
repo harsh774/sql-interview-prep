@@ -38,3 +38,17 @@ Redo each one without looking during revision (Days 14–15).
 | 6 (warm-up) | Top N per group (again) | No DESC, `>= 2`, `city marks` (no comma), comma before FROM, missing `FROM positions`; retry had `marks, from` | Top = DESC, top 2 = `<= 2`. No comma right before FROM or WHERE |
 | 6 | Transactions | Said Postgres would "crash" on a negative balance | Postgres stores it unless a rule says no. Your code runs ROLLBACK; add `CHECK (balance >= 0)` as a safety net |
 | 7 (warm-up) | Commas and aliases | `marks dense_rank()` (no comma), no `AS position`, `marks city` (no comma) | One column per line, comma at the end of every line except the last. Logic (DESC, `<= 2`, FROM positions) was right this time |
+| 8 (warm-up) | FOR UPDATE transaction | No `;` after BEGIN / SELECT, and **no COMMIT** | End with `COMMIT;`. Without it nothing is saved and the row stays locked for everyone else |
+| 8 | Deadlocks | Thought Postgres cancels BOTH transactions | It cancels ONE victim ("deadlock detected", whole transaction rolled back); the other continues. Retry the victim |
+| 8 | Deadlocks | Same lock order is safe "because they're individual transactions" | Whoever gets row 1 first wins; the other waits while holding nothing, so no circle |
+| 8 | Lock order syntax | Wrote only `ORDER BY id` | `ORDER BY id FOR UPDATE`: FOR UPDATE is what takes the locks |
+| 8 | SKIP LOCKED | Said yes to SKIP LOCKED for a wallet withdrawal | Specific row → plain FOR UPDATE (wait). SKIP LOCKED returns 0 rows if Ravi's row is locked. Only for "any free row" (jobs, coupons) |
+| 8 | Optimistic locking | Said `UPDATE 0` "throws an error" | No error, just 0 rows. The code must check the row count |
+| 8 (test) | Atomicity | Crash before COMMIT: picked "both updates saved" | Nothing is saved before COMMIT. Fixed on retake |
+| 8 (test) | Write skew | Picked Repeatable Read | Different rows → only Serializable catches it. Fixed on retake |
+| 8 (test) | MVCC | Didn't know what an UPDATE does | Writes a new row version; old one is a dead row until VACUUM. Fixed on retake |
+| 8 (test) | Tool for the problem | Deadlock → SKIP LOCKED; job workers → version column | Deadlock → same lock order; workers → SKIP LOCKED; version → forms. Fixed on retake |
+| 8 (test) | FOR UPDATE waits | Said T2's `SELECT ... FOR UPDATE` returns 500 immediately, final 300 (lost update) | FOR UPDATE WAITS for T1's COMMIT, then (Read Committed = live scoreboard) sees 400; final 200. FOR UPDATE is the FIX for lost update |
+| 8 (theory) | ACID | Atomicity = "runs on its own"; skipped Isolation and Durability | A = all or nothing, C = constraints hold, I = no one sees uncommitted work, D = survives crashes (WAL) |
+| 8 (theory) | Lost update | "Repeatable Read will read the data again" | Repeatable Read gives the 2nd writer an error → retry. Main fixes: `SET x = x - 100` or FOR UPDATE |
+| 8 (theory) | Deadlock fix | "Process them one by one" | They still run at the same time; only the lock ORDER is the same. Plus short transactions + retry |
